@@ -7,69 +7,77 @@ const supabase = createClient(
 
 const tableName = 'ComplainDataOperator'
 
-let allData = [] // 🔥 simpan semua data
+// SEARCH KE DATABASE
+window.searchData = async () => {
 
-// 🚀 LOAD SEMUA DATA SAAT PAGE DIBUKAs
-async function loadData() {
+  const sn = document
+    .getElementById('inputSN')
+    .value
+    .trim()
+
+  if (!sn) {
+    alert('Please enter Service Number')
+    return
+  }
+
+  document
+    .getElementById('loading')
+    .classList.remove('hidden')
+
   const { data, error } = await supabase
     .from(tableName)
     .select('*')
+    .eq('SN', sn)
     .order('DateRevision', { ascending: false })
+    .limit(100)
+
+  document
+    .getElementById('loading')
+    .classList.add('hidden')
 
   if (error) {
     console.log(error)
-    alert('Error load data ❌')
+    alert('Failed to load data')
     return
   }
 
-  allData = data
-  renderTable(allData) // tampil semua dulu
+  renderTable(data)
 }
 
-// 🔍 SEARCH (FILTER FRONTEND)
-window.searchData = () => {
-  const sn = document.getElementById('inputSN').value.trim()
-
-  // kalau kosong → tampil semua lagi
-  if (!sn) {
-    renderTable(allData)
-    return
-  }
-
-  // filter fleksibel (string biar aman)
-  const filtered = allData.filter(item =>
-    String(item.SN).includes(sn)
-  )
-
-  renderTable(filtered)
-}
-
-// 📋 RENDER TABLE
+// RENDER TABLE
 function renderTable(data) {
+
   const table = document.getElementById('tableBody')
   table.innerHTML = ''
 
-  renderCards(data) // 🔥 TAMBAH INI
+  renderCards(data)
 
-  if (data.length === 0) {
+  if (!data || data.length === 0) {
+
     table.innerHTML = `
       <tr>
-        <td colspan="12" class="text-center p-4 text-gray-500">
-          Data tidak ditemukan
+        <td colspan="12"
+            class="text-center p-6 text-gray-500">
+          No data found
         </td>
       </tr>
     `
+
     return
   }
 
   data.forEach(item => {
+
     const statusColor =
-      item.Status === 'Approved' ? 'bg-green-500' :
-      item.Status === 'Rejected' ? 'bg-red-500' :
-      'bg-yellow-400'
+      item.Status === 'Approved'
+        ? 'bg-green-500'
+        : item.Status === 'Rejected'
+        ? 'bg-red-500'
+        : 'bg-yellow-500'
 
     table.innerHTML += `
       <tr class="border-b hover:bg-gray-50">
+
         <td class="p-2">${item.DateRevision || '-'}</td>
         <td class="p-2">${item.ShiftID || '-'}</td>
         <td class="p-2">${item.SN || '-'}</td>
@@ -82,69 +90,95 @@ function renderTable(data) {
         <td class="p-2">${item.SMUEnd || '-'}</td>
 
         <td class="p-2">
-          <span class="text-white px-2 py-1 rounded ${statusColor}">
+          <span class="text-white px-3 py-1 rounded-full text-xs ${statusColor}">
             ${item.Status || 'Pending'}
           </span>
         </td>
 
-        <td class="p-2 text-xs">${item.Feedback || '-'}</td>
+        <td class="p-2 text-xs">
+          ${item.Feedback || '-'}
+        </td>
+
       </tr>
     `
   })
 }
 
+// MOBILE CARD
 function renderCards(data) {
-  const container = document.getElementById('cardContainer')
+
+  const container =
+    document.getElementById('cardContainer')
+
   container.innerHTML = ''
 
-  if (data.length === 0) {
+  if (!data || data.length === 0) {
+
     container.innerHTML = `
-      <div class="text-center text-gray-500 p-4">
-        Data tidak ditemukan
+      <div class="bg-white rounded-xl p-4 text-center text-gray-500">
+        No data found
       </div>
     `
+
     return
   }
 
   data.forEach(item => {
+
     const statusColor =
-      item.Status === 'Approved' ? 'bg-green-500' :
-      item.Status === 'Rejected' ? 'bg-red-500' :
-      'bg-yellow-400'
+      item.Status === 'Approved'
+        ? 'bg-green-500'
+        : item.Status === 'Rejected'
+        ? 'bg-red-500'
+        : 'bg-yellow-500'
 
     container.innerHTML += `
-      <div class="bg-white p-4 rounded-xl shadow text-sm sm:text-base">
+      <div class="bg-white/95 rounded-2xl shadow-lg p-4">
 
-        <!-- HEADER -->
-        <div class="flex justify-between items-start mb-2">
+        <div class="flex justify-between mb-3">
+
           <div>
-            <div class="font-semibold text-sm sm:text-base">
+            <div class="font-semibold">
               ${item.SN} - ${item.Name}
             </div>
+
             <div class="text-xs text-gray-500">
-              ${item.DateRevision || '-'} | Shift ${item.ShiftID || '-'}
+              ${item.DateRevision || '-'}
             </div>
           </div>
 
           <span class="text-white text-xs px-2 py-1 rounded ${statusColor}">
             ${item.Status || 'Pending'}
           </span>
+
         </div>
 
-        <!-- DETAIL GRID -->
-        <div class="grid grid-cols-2 gap-2 text-xs sm:text-sm mt-2">
-          <div><b>Unit:</b> ${item.UnitID || '-'}</div>
-          <div><b>Revision:</b> ${item.RevisionType || '-'}</div>
-          <div><b>Ritase:</b> ${item.RitationAct || '-'}</div>
-          <div><b>Distance:</b> ${item.DistanceAct || '-'}</div>
-          <div class="col-span-2">
-            <b>SMU:</b> ${item.SMUStart || '-'} - ${item.SMUEnd || '-'}
+        <div class="grid grid-cols-2 gap-2 text-sm">
+
+          <div>
+            <b>Unit</b><br>
+            ${item.UnitID || '-'}
           </div>
+
+          <div>
+            <b>Revision</b><br>
+            ${item.RevisionType || '-'}
+          </div>
+
+          <div>
+            <b>Ritase</b><br>
+            ${item.RitationAct || '-'}
+          </div>
+
+          <div>
+            <b>Distance</b><br>
+            ${item.DistanceAct || '-'}
+          </div>
+
         </div>
 
-        <!-- FEEDBACK -->
-        <div class="mt-3 text-xs sm:text-sm bg-gray-50 p-2 rounded">
-          <b>Feedback:</b><br>
+        <div class="mt-3 bg-gray-50 p-2 rounded text-sm">
+          <b>Feedback</b><br>
           ${item.Feedback || '-'}
         </div>
 
@@ -153,17 +187,17 @@ function renderCards(data) {
   })
 }
 
-// 🔥 SEARCH REALTIME (LANGSUNG FILTER SAAT NGETIK)
-document.getElementById('inputSN').addEventListener('input', () => {
-  searchData()
-})
+// ENTER KEY
+document
+  .getElementById('inputSN')
+  .addEventListener('keypress', function (e) {
 
-// 🔥 ENTER KEY (optional)
-document.getElementById('inputSN').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    searchData()
-  }
-})
+    if (e.key === 'Enter') {
+      searchData()
+    }
 
-// INIT
-loadData()
+  })
+
+// TAMPILAN AWAL KOSONG
+renderTable([])
+
