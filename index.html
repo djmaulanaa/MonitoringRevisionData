@@ -7,96 +7,125 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-blue-900 via-slate-800 to-slate-900 p-4">
+<body class="min-h-screen flex flex-col bg-gradient-to-br from-blue-900 via-slate-800 to-slate-900">
 
-  <!-- HEADER -->
-  <div class="max-w-7xl mx-auto">
+  <!-- CONTENT -->
+  <div class="flex-1 p-4">
 
-    <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl p-6 mb-6">
+    <div class="max-w-7xl mx-auto">
 
-      <div class="flex items-center gap-4">
+      <!-- HEADER -->
+      <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl p-6 mb-6">
 
-        <div class="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">
-          D
+        <div class="flex items-center gap-4">
+
+          <div class="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">
+            D
+          </div>
+
+          <div>
+            <h1 class="text-2xl font-bold text-slate-800">
+              Operator Revision Status
+            </h1>
+
+            <p class="text-sm text-slate-500">
+              Check your revision request status
+            </p>
+          </div>
+
         </div>
 
-        <div>
-          <h1 class="text-2xl font-bold text-slate-800">
-            Operator Revision Status
-          </h1>
+      </div>
 
-          <p class="text-sm text-slate-500">
-            Check your revision request status
-          </p>
+      <!-- SEARCH -->
+      <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl p-4 mb-6">
+
+        <div class="flex flex-col sm:flex-row gap-3">
+
+          <input
+            id="inputSN"
+            placeholder="Enter Service Number (SN)"
+            class="flex-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+          <button
+            onclick="searchData()"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition">
+            Search
+          </button>
+
+        </div>
+
+        <div
+          id="loading"
+          class="hidden mt-3 text-center text-blue-300 font-medium">
+          Loading data...
         </div>
 
       </div>
 
-    </div>
+      <!-- MOBILE CARD -->
+      <div id="cardContainer" class="grid gap-4 md:hidden"></div>
 
-    <!-- SEARCH -->
-    <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl p-4 mb-6">
+      <!-- DESKTOP TABLE -->
+      <div class="hidden md:block bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden">
 
-      <div class="flex flex-col sm:flex-row gap-3">
+        <table class="min-w-full text-sm">
 
-        <input
-          id="inputSN"
-          placeholder="Enter Service Number (SN)"
-          class="flex-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <thead class="bg-blue-600 text-white">
 
-        <button
-          onclick="searchData()"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition">
-          Search
-        </button>
+            <tr>
+              <th class="p-3">Date</th>
+              <th class="p-3">Shift</th>
+              <th class="p-3">SN</th>
+              <th class="p-3">Name</th>
+              <th class="p-3">Unit</th>
+              <th class="p-3">Revision Type</th>
+              <th class="p-3">Ritase</th>
+              <th class="p-3">Distance</th>
+              <th class="p-3">SMU Start</th>
+              <th class="p-3">SMU End</th>
+              <th class="p-3">Status</th>
+              <th class="p-3">Feedback</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="tableBody"></tbody>
+
+        </table>
 
       </div>
-
-      <div
-        id="loading"
-        class="hidden mt-3 text-center text-blue-600 font-medium">
-        Loading data...
-      </div>
-
-    </div>
-
-    <!-- MOBILE CARD -->
-    <div id="cardContainer" class="grid gap-4 md:hidden"></div>
-
-    <!-- DESKTOP TABLE -->
-    <div class="hidden md:block bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden">
-
-      <table class="min-w-full text-sm">
-
-        <thead class="bg-blue-600 text-white">
-
-          <tr>
-            <th class="p-3">Date</th>
-            <th class="p-3">Shift</th>
-            <th class="p-3">SN</th>
-            <th class="p-3">Name</th>
-            <th class="p-3">Unit</th>
-            <th class="p-3">Revision Type</th>
-            <th class="p-3">Ritase</th>
-            <th class="p-3">Distance</th>
-            <th class="p-3">SMU Start</th>
-            <th class="p-3">SMU End</th>
-            <th class="p-3">Status</th>
-            <th class="p-3">Feedback</th>
-          </tr>
-
-        </thead>
-
-        <tbody id="tableBody"></tbody>
-
-      </table>
 
     </div>
 
   </div>
 
+  <!-- FOOTER (FIXED BOTTOM STYLE FLEX) -->
+  <footer class="mt-auto p-4">
+
+    <div class="max-w-7xl mx-auto">
+
+      <div class="bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl p-4 text-center">
+
+        <h3 class="text-white font-semibold">
+          PT Cipta Kridatama - Site BIB
+        </h3>
+
+        <p class="text-slate-300 text-sm mt-1">
+          Productivity Monitoring & Revision Management System
+        </p>
+
+        <p class="text-xs text-slate-400 mt-3 border-t border-white/10 pt-3">
+          © 2026 Operational Monitoring & Control • Built for Dispatcher & Operator Collaboration
+        </p>
+
+      </div>
+
+    </div>
+
+  </footer>
+
   <script type="module" src="operator.js"></script>
 
 </body>
 </html>
-
