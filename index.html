@@ -7,53 +7,96 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100 p-3 sm:p-4 md:p-6">
+<body class="min-h-screen bg-gradient-to-br from-blue-900 via-slate-800 to-slate-900 p-4">
 
   <!-- HEADER -->
-  <div class="mb-4 md:mb-6">
-    <h1 class="text-lg sm:text-xl md:text-2xl font-bold">
-      📋 Status Revisi Operator
-    </h1>
-  </div>
+  <div class="max-w-7xl mx-auto">
 
-  <!-- INPUT SN -->
-  <div class="mb-4 flex flex-col sm:flex-row gap-2">
-    <input id="inputSN" 
-      placeholder="Masukkan SN..." 
-      class="border p-3 text-sm sm:text-base rounded w-full sm:w-60 focus:ring-2 focus:ring-blue-400">
+    <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl p-6 mb-6">
 
-    <button onclick="searchData()" 
-      class="bg-blue-500 text-white p-3 text-sm sm:text-base rounded w-full sm:w-auto">
-      Search
-    </button>
-  </div>
+      <div class="flex items-center gap-4">
 
-  <!-- 🔥 MOBILE VIEW (CARD) -->
-  <div id="cardContainer" class="grid gap-3 md:hidden"></div>
+        <div class="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">
+          D
+        </div>
 
-  <!-- 💻 DESKTOP TABLE -->
-  <div class="hidden md:block overflow-x-auto bg-white rounded-xl shadow">
-    <table class="min-w-full text-sm">
-      <thead class="bg-gray-200">
-        <tr>
-          <th class="p-2">Date</th>
-          <th class="p-2">Shift</th>
-          <th class="p-2">SN</th>
-          <th class="p-2">Name</th>
-          <th class="p-2">Unit</th>
-          <th class="p-2">RevisionType</th>
-          <th class="p-2">Ritase</th>
-          <th class="p-2">Distance</th>
-          <th class="p-2">SMU Start</th>
-          <th class="p-2">SMU End</th>
-          <th class="p-2">Status</th>
-          <th class="p-2">Feedback</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
+        <div>
+          <h1 class="text-2xl font-bold text-slate-800">
+            Operator Revision Status
+          </h1>
+
+          <p class="text-sm text-slate-500">
+            Check your revision request status
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- SEARCH -->
+    <div class="bg-white/95 backdrop-blur-lg rounded-2xl shadow-xl p-4 mb-6">
+
+      <div class="flex flex-col sm:flex-row gap-3">
+
+        <input
+          id="inputSN"
+          placeholder="Enter Service Number (SN)"
+          class="flex-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+        <button
+          onclick="searchData()"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition">
+          Search
+        </button>
+
+      </div>
+
+      <div
+        id="loading"
+        class="hidden mt-3 text-center text-blue-600 font-medium">
+        Loading data...
+      </div>
+
+    </div>
+
+    <!-- MOBILE CARD -->
+    <div id="cardContainer" class="grid gap-4 md:hidden"></div>
+
+    <!-- DESKTOP TABLE -->
+    <div class="hidden md:block bg-white/95 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden">
+
+      <table class="min-w-full text-sm">
+
+        <thead class="bg-blue-600 text-white">
+
+          <tr>
+            <th class="p-3">Date</th>
+            <th class="p-3">Shift</th>
+            <th class="p-3">SN</th>
+            <th class="p-3">Name</th>
+            <th class="p-3">Unit</th>
+            <th class="p-3">Revision Type</th>
+            <th class="p-3">Ritase</th>
+            <th class="p-3">Distance</th>
+            <th class="p-3">SMU Start</th>
+            <th class="p-3">SMU End</th>
+            <th class="p-3">Status</th>
+            <th class="p-3">Feedback</th>
+          </tr>
+
+        </thead>
+
+        <tbody id="tableBody"></tbody>
+
+      </table>
+
+    </div>
+
   </div>
 
   <script type="module" src="operator.js"></script>
+
 </body>
 </html>
+
